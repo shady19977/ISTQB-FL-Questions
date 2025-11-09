@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISTQB CTFL v4.0 - Exam Questions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            padding: 20px 30px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .filter-group label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #495057;
+            text-transform: uppercase;
+        }
+
+        select {
+            padding: 10px 15px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            background: white;
+            transition: all 0.3s;
+        }
+
+        select:hover {
+            border-color: #667eea;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .content {
+            padding: 30px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .chapter-title {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+        }
+
+        .question-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s;
+        }
+
+        .question-card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .question-number {
+            font-weight: 700;
+            color: #667eea;
+            font-size: 14px;
+        }
+
+        .exam-badge {
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .question-text {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 500;
+            white-space: pre-wrap;
+        }
+
+        .choices {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .choice {
+            padding: 12px 15px;
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .choice:hover {
+            border-color: #667eea;
+            background: #f0f2ff;
+        }
+
+        .choice-label {
+            font-weight: 700;
+            color: #667eea;
+            margin-right: 8px;
+        }
+
+        .show-answer-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .show-answer-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .show-answer-btn:active {
+            transform: translateY(0);
+        }
+
+        .answer-section {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #d4edda;
+            border: 2px solid #28a745;
+            border-radius: 8px;
+        }
+
+        .answer-section.show {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .correct-answer {
+            font-weight: 700;
+            color: #155724;
+            font-size: 16px;
+        }
+
+        .no-questions {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6c757d;
+            font-size: 18px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+            background: #f8f9fa;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #6c757d;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+            }
+            
+            .header h1 {
+                font-size: 22px;
+            }
+            
+            .question-text {
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ISTQB Certified Tester Foundation Level v4.0</h1>
+            <p>Complete Sample Exam Questions - All Chapters & Exam Sets</p>
+        </div>
+
+        <div class="controls">
+            <div class="filter-group">
+                <label for="chapterSelect">Chapter</label>
+                <select id="chapterSelect">
+                    <option value="all">All Chapters</option>
+                    <option value="1">Chapter 1: Fundamentals of Testing</option>
+                    <option value="2">Chapter 2: Testing Throughout the SDLC</option>
+                    <option value="3">Chapter 3: Static Testing</option>
+                    <option value="4">Chapter 4: Test Analysis and Design</option>
+                    <option value="5">Chapter 5: Managing the Test Activities</option>
+                    <option value="6">Chapter 6: Test Tools</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="examSelect">Exam Set</label>
+                <select id="examSelect">
+                    <option value="all">All Exam Sets</option>
+                    <option value="A">Sample Exam A</option>
+                    <option value="B">Sample Exam B</option>
+                    <option value="C">Sample Exam C</option>
+                    <option value="D">Sample Exam D</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="content" id="questionsContainer">
+            <div class="no-questions">Loading questions...</div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number" id="totalQuestions">0</div>
+                <div class="stat-label">Total Questions</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="displayedQuestions">0</div>
+                <div class="stat-label">Displayed</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            // CHAPTER 1 - FUNDAMENTALS OF TESTING
+            // Exam D
+            {chapter:1,exam:"D",number:1,text:"Which of the following is a typical test objective?",choices:["Finding and fixing defects in the test object","Maintaining effective communications with developers","Validating that legal requirements have been met","Building confidence in the quality of the test object"],answer:"d"},
+            {chapter:1,exam:"D",number:2,text:"A designer documents a design for a user interface that does not suitably address disabled users because the designer is tired. The programmer implements the user interface in line with the design but as they are working under severe time pressure, they do not include suitable exception handling in their program code for bonus calculations. When the operational system is used, complaints are made by some disabled users about the interface and the company is subsequently fined by the relevant regulatory authority. No one notices that bonus calculations are sometimes incorrect.\n\nWhich of the following statements is CORRECT?",choices:["The miscalculation of bonuses is a failure by the system, not a defect","The fine received for failing to address some disabled users is a failure","The programmer working under severe time pressure is a root cause","The design of the user interface includes a designer error"],answer:"c"},
+            {chapter:1,exam:"D",number:3,text:"Test conditions are being used by testers to generate test cases and execute tests. Even though the test conditions remain the same, the test cases are varied each time. Which of the following 'principles of testing' is being addressed through the variation of test cases?",choices:["Tests wear out","Absence-of-defects fallacy","Early testing saves time and money","Defects cluster together"],answer:"a"},
+            {chapter:1,exam:"D",number:4,text:"Given the following test tasks:\n1. Derive test cases from test conditions\n2. Identify reusable testware\n3. Organize test cases into test procedures\n4. Evaluate the test basis and the test object\n\nAnd the following test activities:\nA. Test analysis\nB. Test design\nC. Test implementation\nD. Test completion\n\nWhich of the following BEST matches the tasks with the activities?",choices:["1B, 2A, 3D, 4C","1B, 2D, 3C, 4A","1C, 2A, 3B, 4D","1C, 2D, 3A, 4B"],answer:"b"},
+            {chapter:1,exam:"D",number:5,text:"Given the following testware:\ni. Test completion report\nii. Data held in a database used for test inputs and expected results\niii. The list of elements needed to build the test environment\niv. Documented sequences of test cases in execution order\nv. Test cases\n\nWhich of the following BEST shows the testware produced as a result of performing test implementation?",choices:["ii, iv","iii, v","i, ii, v","i, iii, iv"],answer:"a"},
+            {chapter:1,exam:"D",number:6,text:"Which of the following is MOST likely to describe a task performed by someone in a test management role?",choices:["Evaluate the test basis and the test object","Define test environment requirements","Assess testability of the test object","Create the test completion report"],answer:"d"},
+            {chapter:1,exam:"D",number:7,text:"Which of the following is an advantage of the whole team approach?",choices:["Improved communication between team members","Decreased individual accountability for quality","Faster deployment of deliverables to the end users","Reduced collaboration with external business users"],answer:"a"},
+            {chapter:1,exam:"D",number:8,text:"Given the following benefits and drawbacks of the independence of testing:\ni. The testers work in a different location from the developers\nii. Testers question the assumptions programmers make while writing code\niii. A confrontational dynamic has been established between testers and developers\niv. Developers have convinced themselves that testers are mostly accountable for quality\nv. Testers have different biases than those held by the developers\n\nWhich are MOST likely to be considered benefits?",choices:["i, iv","ii, v","i, iii, iv","ii, iii, v"],answer:"b"},
+            // Exam C
+            {chapter:1,exam:"C",number:1,text:"Which of the following is a typical test objective?",choices:["Validating that documented requirements are met","Causing failures and identifying defects","Initiating errors and identifying root causes","Verifying the test object meets user expectations"],answer:"b"},
+            {chapter:1,exam:"C",number:2,text:"Which of the following statements BEST describes the difference between testing and debugging?",choices:["Testing causes failures while debugging fixes failures","Testing is a negative activity while debugging is a positive activity","Testing determines that defects exist while debugging removes defects","Testing finds the cause of defects while debugging fixes the cause of defects"],answer:"c"},
+            {chapter:1,exam:"C",number:3,text:"The 'absence-of-defects fallacy' is one of the principles of testing. Which of the following is an example of addressing this principle in practice?",choices:["Explaining that it is not possible for testing to show the absence of defects","Supporting the end users to perform acceptance testing","Ensuring that no implementation defects remain in the delivered system","Modifying tests that cause no failures to ensure few defects remain"],answer:"b"},
+            {chapter:1,exam:"C",number:4,text:"Which of the following test activities are MOST likely to involve the application of boundary value analysis and equivalence partitioning?",choices:["Test implementation","Test design","Test execution","Test monitoring","Test analysis"],answer:"b, e"},
+            {chapter:1,exam:"C",number:5,text:"Given the following testware:\n1. Coverage items\n2. Change requests\n3. Test execution schedule\n4. Prioritized test conditions\n\nAnd the following test activities:\nA. Test analysis\nB. Test design\nC. Test implementation\nD. Test completion\n\nWhich of the following BEST shows the testware produced by the activities?",choices:["1B, 2D, 3C, 4A","1B, 2D, 3A, 4C","1D, 2C, 3A, 4B","1D, 2C, 3B, 4A"],answer:"a"},
+            {chapter:1,exam:"C",number:6,text:"Which of the following statements about the different testing roles is MOST likely to be CORRECT?",choices:["In Agile software development, the test management role is the primary responsibility of the team, while the testing role is primarily the responsibility of a single individual from outside the team","The testing role is primarily responsible for test monitoring and test control, while the test management role is primarily responsible for test planning and test completion","In Agile software development, test management activities that span multiple teams are handled by a test manager outside the team, while some test management tasks are handled by the team itself","The test management role is primarily responsible for test analysis and test design, while the testing role is primarily responsible for test implementation and test execution"],answer:"c"},
+            {chapter:1,exam:"C",number:7,text:"Which of the following is an advantage of the whole-team approach?",choices:["Teams with no testers","Improved team dynamics","Specialist team members","Larger team sizes"],answer:"b"},
+            {chapter:1,exam:"C",number:8,text:"Which of the following statements about the independence of testing is CORRECT?",choices:["Independent testers will find defects due to their different technical perspective from developers, but their independence may lead to an adversarial relationship with the developers","Developers' familiarity with their own code means they only find a few defects in it, however their shared software background with testers means these defects would also be found by the testers","Independent testing requires testers who are outside the developer's team and ideally from outside the organization, however these testers find it difficult to understand the application domain","Testers from outside the developer's team are more independent than testers from within the team, but the testers from within the team are more likely to be blamed for delays in product release"],answer:"a"},
+            // Exam B
+            {chapter:1,exam:"B",number:1,text:"Which of the following is an example of why testing is necessary?",choices:["Dynamic testing increases quality by causing test objects to fail in ways that could never be achieved by the users","Static testing is used by developers to identify failures in their code earlier than can be achieved through dynamic testing","Static analysis provides evidence to customers that the elements of the system that provide no outputs are fit for release","Reviews increase the quality of requirements specifications and lead to fewer changes being needed in derived work products"],answer:"d"},
+            {chapter:1,exam:"B",number:2,text:"Which of the following statements about quality assurance (QA) and/or quality control (QC) is correct?",choices:["QA is performed as part of testing","Testing is performed as part of QC","Testing is another term for QC","Testing is performed as part of QA"],answer:"b"},
+            {chapter:1,exam:"B",number:3,text:"One of the 'principles of testing' states that exhaustive testing is impossible. Which of the following is an example of addressing this principle in practice?",choices:["Creating test cases that cover every possible specified output","Documenting all possible test input variations and prioritizing these based on importance","Starting testing as early as possible with reviews and other static testing approaches","Using equivalence partitioning and boundary value analysis to generate test cases"],answer:"d"},
+            {chapter:1,exam:"B",number:4,text:"Which test activity involves working with test data requirements, test conditions, test environment requirements and test cases?",choices:["Test design","Test execution","Test analysis","Test implementation"],answer:"a"},
+            {chapter:1,exam:"B",number:5,text:"Which of the following is MOST likely to impact how testing is performed for a given test object?",choices:["The average level of experience of the organization's marketing team","The knowledge of users that a new system is being developed for them","The number of years' experience of the members of the test team","The end user's organizational structure for a commercial music streaming application"],answer:"c"},
+            {chapter:1,exam:"B",number:6,text:"Which of the following statements is a CORRECT example of the value of traceability?",choices:["Traceability between the mitigated risks and test cases that passed provides a means of determining the level of residual risk","Traceability between user requirements and test results provides a means of measuring project progress against business goals","Traceability between testers and test cases that failed provides a means of determining the skill level of the testers","Traceability between the identified risks and written test conditions provides a means of determining which risks are worth testing"],answer:"b"},
+            {chapter:1,exam:"B",number:7,text:"Which of the following is MOST likely to be an example of a tester using a generic skill when testing?",choices:["The tester's deep knowledge of a variety of computer games meant that they got on well with one of the developers who was also into gaming","The tester was a former pilot and was better able to understand the acceptance criteria for the helicopter control system","The tester previously worked as a programmer and used their skills in this area to better communicate with the business analysts","The tester was very careful not to make mistakes when they methodically generated test cases prior to starting their exploratory testing session"],answer:"b"},
+            {chapter:1,exam:"B",number:8,text:"How is the whole team approach present in the interactions between testers and business representatives?",choices:["Business representatives decide on test automation approaches","Testers help business representatives to define a test strategy","Business representatives are not part of the whole team approach","Testers help business representatives to create suitable acceptance tests"],answer:"d"},
+            // Exam A
+            {chapter:1,exam:"A",number:1,text:"Which of the following statements describe a valid test objective?",choices:["To prove that there are no unfixed defects in the system under test","To prove that there will be no failures after the implementation of the system into production","To reduce the risk level of the test object and to build confidence in the quality level","To verify that there are no untested combinations of inputs"],answer:"c"},
+            {chapter:1,exam:"A",number:2,text:"Which of the following options shows an example of test activities that contribute to success?",choices:["Having testers involved during various software development lifecycle (SDLC) activities will help to detect defects in work products","Testers try not to disturb the developers while coding, so that the developers write better code","Testers collaborating with end users help to improve the quality of defect reports during component integration and system testing","Certified testers will design much better test cases than non-certified testers"],answer:"a"},
+            {chapter:1,exam:"A",number:3,text:"You have been assigned as a tester to a team producing a new system incrementally. You have noticed that no changes have been made to the existing regression test cases for several iterations and no new regression defects were identified. Your manager is happy, but you are not. Which testing principle explains your skepticism?",choices:["Tests wear out","Absence-of-defects fallacy","Defects cluster together","Exhaustive testing is impossible"],answer:"a"},
+            {chapter:1,exam:"A",number:4,text:"You work in a team that develops a mobile application for food ordering. In the current iteration the team decided to implement the payment functionality.\n\nWhich of the following activities is a part of test analysis?",choices:["Estimating that testing the integration with the payment service will take 8 person-days","Deciding that the team should test if it is possible to properly share payment between many users","Using boundary value analysis (BVA) to derive the test data for the test cases that check the correct payment processing for the minimum allowed amount to be paid","Analyzing the discrepancy between the actual result and expected result after executing a test case that checks the process of payment with a credit card, and reporting a defect"],answer:"b"},
+            {chapter:1,exam:"A",number:5,text:"Which of the following factors have a SIGNIFICANT influence on the test approach?\ni. The SDLC\nii. The number of defects detected in previous projects\niii. The identified product risks\niv. New regulatory requirements forcing formal white-box testing\nv. The test environment setup",choices:["i, ii have significant influence","i, iii, iv have significant influence","ii, iv, v have significant influence","iii, v have significant influence"],answer:"b"},
+            {chapter:1,exam:"A",number:6,text:"Which TWO of the following tasks belong MAINLY to a testing role?",choices:["Configure test environments","Maintain the product backlog","Design solutions to new requirements","Create the test plan","Analyze the test basis"],answer:"a, e"},
+            {chapter:1,exam:"A",number:7,text:"Which of the following skills (i-v) are the MOST important skills of a tester?\ni. Having domain knowledge\nii. Creating a product vision\niii. Being a good team player\niv. Planning and organizing the work of the team\nv. Critical thinking",choices:["ii and iv are important","i, iii and v are important","i, ii and v are important","iii and iv are important"],answer:"b"},
+            {chapter:1,exam:"A",number:8,text:"How is the whole team approach present in the interactions between testers and business representatives?",choices:["Business representatives decide on test automation approaches","Testers help business representatives to define a test strategy","Business representatives are not part of the whole team approach","Testers help business representatives to create suitable acceptance tests"],answer:"d"},
+            // Additional Questions - Exam A
+            {chapter:1,exam:"A",number:"A1",text:"You were given a task to analyze and fix causes of failures in a new system to be released.\n\nWhich activity are you performing?",choices:["Debugging","Software testing","Requirement elicitation","Defect management"],answer:"a"},
+            {chapter:1,exam:"A",number:"A2",text:"In many software organizations the test department is called the Quality Assurance (QA) department. Is this sentence correct or not and why?",choices:["It is correct. Testing and QA mean exactly the same thing","It is correct. These names can be used interchangeably because both testing and QA focus their activities on the same quality issues","It is not correct. Testing is something more; testing includes all activities with regard to quality. QA focuses on quality-related processes","It is not correct. QA is focused on quality-related processes while testing concentrates on demonstrating that a component or system is fit for purpose and to detect defects"],answer:"d"},
+            {chapter:1,exam:"A",number:"A3",text:"A phone ringing in a neighboring cubicle distracts a programmer causing him to improperly program the logic that checks the upper boundary of an input variable. Later, during system testing, a tester notices that this input field accepts invalid input values.\n\nWhich of the following correctly describes an incorrectly coded upper bound?",choices:["The root cause","A failure","An error","A defect"],answer:"d"},
+            {chapter:1,exam:"A",number:"A4",text:"Consider the following testware:\n\nTest Charter #04.018 Session time: 1h\nExplore: Registration page\nWith: Different sets of incorrect input data\nTo discover: Defects related to accepting the registration process with the incorrect input\n\nWhich test activity produces this testware as an output?",choices:["Test planning","Test monitoring and test control","Test analysis","Test design"],answer:"d"},
+            {chapter:1,exam:"A",number:"A5",text:"Which of the following is the BEST example of how traceability supports testing?",choices:["Performing the impact analysis of a change will give information about the completion of the tests","Analyzing the traceability between test cases and test results will give information about the estimated level of residual risk","Performing the impact analysis of a change will help selecting the right test cases for regression testing","Analyzing the traceability between the test basis, the test objects and the test cases will help in selecting test data to achieve the assumed coverage of the test object"],answer:"c"},
+            {chapter:1,exam:"A",number:"A6",text:"Which of the following BEST explains a benefit of independence of testing?",choices:["The use of an independent test team allows project management to assign responsibility for the quality of the final deliverable to the test team","If a test team external to the organization can be afforded, then there are distinct benefits in terms of this external team not being so easily swayed by the delivery concerns of project management and the need to meet strict delivery deadlines","An independent test team can work separately from the developers, need not be distracted with project requirement changes, and can restrict communication with the developers to defect reporting through the defect management system","When specifications contain ambiguities and inconsistencies, assumptions are made on their interpretation, and an independent tester can be useful in questioning those assumptions and the interpretation made by the developer"],answer:"d"},
+
+            // CHAPTER 2 - TESTING THROUGHOUT THE SDLC
+            // Exam D
+            {chapter:2,exam:"D",number:9,text:"Which of the following is a good testing practice that applies to all software development lifecycles?",choices:["Each test level has specific and distinct test objectives","Test implementation and execution for a given test level should start during the corresponding development phase","Testers should start test design as soon as drafts of the relevant work products become available","Every dynamic testing activity has a corresponding static testing activity"],answer:"a"},
+            {chapter:2,exam:"D",number:10,text:"Which of the following is an example of a test-first approach to development?",choices:["Behavior-Driven Development","Test Level Driven Development","Function-Driven Development","Performance-Driven Development"],answer:"a"},
+            {chapter:2,exam:"D",number:11,text:"Which of the following is MOST likely to be a challenge encountered when implementing DevOps?",choices:["Making sure that non-functional quality characteristics are not overlooked","Managing continuously changing test environments","The need for more manual testers with suitable experience","Setting up the test automation as part of the delivery pipeline"],answer:"d"},
+            {chapter:2,exam:"D",number:12,text:"Which of the following BEST describes retrospectives?",choices:["Retrospectives allow team members to identify other team members who did not fully contribute to achieving quality as required by the whole team approach","Retrospectives give testers an opportunity to identify activities that were successful so that these are retained when potential improvements are made in the future","Retrospectives are where agile team members are allowed to voice their concerns about management and customers in a blameless environment","Retrospectives give agile team members a forum where they focus on discussing the plan and technical decisions for the next iteration"],answer:"b"},
+            {chapter:2,exam:"D",number:13,text:"Which of the following tests is MOST likely to be performed as part of functional testing?",choices:["The test checks that the sort function puts the elements of the list or array in ascending order","The test checks whether the sort function completes sorting within one second of starting","The test checks how easily the sort function can be changed from sorting ascending to sorting descending","The test checks that the sort function still functions correctly when moved from a 32-bit to a 64-bit architecture"],answer:"a"},
+            {chapter:2,exam:"D",number:14,text:"Which of the following is MOST likely to be a trigger that leads to maintenance testing of a currency exchange system?",choices:["The developers reported that changing the currency exchange system was difficult and the testers decided to check if this was true","The refund option of the currency exchange system was removed as it did not always repay the correct amount to customers","The agile team has started developing a user story that adds a new customer loyalty feature to the currency exchange system","The language support option of the currency exchange system was used to enable both English and local language currency transactions"],answer:"b"},
+            // Exam C
+            {chapter:2,exam:"C",number:9,text:"Which of the following is a good testing practice that applies to all software development lifecycles?",choices:["For each test level, there is a corresponding development level","For each test objective, there is a corresponding development objective","For every test activity, there is a corresponding user activity","For every development activity, there is a corresponding test activity"],answer:"d"},
+            {chapter:2,exam:"C",number:10,text:"Which of the following is an example of a test-first approach to development?",choices:["Component Test-Driven Development","Integration Test-Driven Development","System Test-Driven Development","Acceptance Test-Driven Development"],answer:"d"},
+            {chapter:2,exam:"C",number:11,text:"Which of the following provides the BEST description of shift-left?",choices:["When agreed by the developers, manual activities on the left-hand side of the test process are automated to support the principle of 'early testing saves time and money'","Where cost-effective, test activities are moved earlier in the software development lifecycle (SDLC) to reduce the total cost of quality by reducing the number of defects found later in the SDLC","When they have spare time available, testers are required to automate tests for regression testing, starting with component tests and component integration tests","When available, testers are trained to perform tasks early in the SDLC to allow more test activities to be automated later in the SDLC"],answer:"b"},
+            {chapter:2,exam:"C",number:12,text:"Which of the following is LEAST likely to occur as a result of a retrospective?",choices:["The quality of future test objects improves by identifying improvements in development practices","Test efficiency improves by speeding up the configuration of test environments through automation","End users' understanding of the development and test processes is improved","Automated test scripts are enhanced through feedback from developers"],answer:"c"},
+            {chapter:2,exam:"C",number:13,text:"Which of the following test levels is MOST likely being performed if the testing is focused on validation and is not being performed by testers?",choices:["Component testing","Component integration testing","System integration testing","Acceptance testing"],answer:"d"},
+            {chapter:2,exam:"C",number:14,text:"The navigation system software has been updated due to it suggesting routes that break traffic laws, such as driving the wrong way down one-way streets. Which of the following BEST describes the testing that will be performed?",choices:["Only confirmation testing","Confirmation testing then regression testing","Only regression testing","Regression testing then confirmation testing"],answer:"b"},
+            // Exam B
+            {chapter:2,exam:"B",number:9,text:"Which of the following statements about the chosen software development lifecycle is CORRECT?",choices:["If agile software development is used, automation of system tests replaces the need for regression testing","If a sequential development model is used, then the dynamic testing is typically restricted to later in the lifecycle","If an iterative development model is used, then component testing is typically performed manually by developers","If an incremental development model is used, then static testing is done in early increments and dynamic testing in later increments"],answer:"b"},
+            {chapter:2,exam:"B",number:10,text:"Which of the following is a good testing practice that applies to all software development lifecycles?",choices:["Testers should review work products as part of the next development phase","Testers should review work products as soon as drafts are available","Testers should review work products before test analysis and test design begin","Testers should review work products immediately after they are published"],answer:"b"},
+            {chapter:2,exam:"B",number:11,text:"Which of the following is an example of a test-first approach to development?",choices:["Test-Driven Development","Coverage-Driven Development","Quality-Driven Development","Feature-Driven Development"],answer:"a"},
+            {chapter:2,exam:"B",number:12,text:"Which of the following statements about DevOps is CORRECT?",choices:["To speed up releases, continuous integration is used to encourage developers to submit code quickly without the need to complete component testing","To be able to update and release systems on a more frequent basis, many automated regression tests are required to reduce the risk of regression","To treat both developers and operations equally, the testers will allocate more effort to release testing by operations using a shift-right approach","To create increased synergy between testers, developers and operations, the testing must become fully automated with no manual testing"],answer:"b"},
+            {chapter:2,exam:"B",number:13,text:"Which of the following is MOST likely to be performed as part of system testing?",choices:["Security testing of a credit management system by an independent test team","Testing the interface of a currency exchange system with an external banking system","Beta testing of a remote learning system by courseware developers","Testing interactions between the user interface and database of a human resources system"],answer:"a"},
+            {chapter:2,exam:"B",number:14,text:"Which of the following statements is CORRECT?",choices:["Regression tests increase in number as the project progresses, whereas the number of confirmation tests decreases as the project progresses","Regression tests are created and run when the test object is fixed, whereas confirmation tests are run whenever the test object is enhanced","Regression testing is concerned with checking that the operational environment remains unchanged, whereas confirmation testing is concerned with testing changes to the test object","Regression testing is concerned with adverse effects in unchanged code, whereas confirmation testing is concerned with testing changed code"],answer:"d"},
+            // Exam A
+            {chapter:2,exam:"A",number:9,text:"Consider the following rule: 'for every SDLC activity there is a corresponding test activity'. In which SDLC models does this rule hold?",choices:["Only in sequential development models","Only in iterative development models","Only in iterative and incremental development models","In sequential, incremental, and iterative development models"],answer:"d"},
+            {chapter:2,exam:"A",number:10,text:"Which of the following statements BEST describes the acceptance test-driven development (ATDD) approach?",choices:["In ATDD, acceptance criteria are typically created based on the given/when/then format","In ATDD, test cases are mainly created at component testing and are code-oriented","In ATDD, tests are created, based on acceptance criteria to drive the development of the related software","In ATDD, tests are based on the desired behavior of the software, which makes it easier for team members to understand them"],answer:"c"},
+            {chapter:2,exam:"A",number:11,text:"Which of the following is NOT an example of the shift-left approach?",choices:["Reviewing the user requirements before they are formally accepted by the stakeholders","Writing a component test before the corresponding code is written","Executing a performance efficiency test for a component during component testing","Writing a test script before setting up the configuration management process"],answer:"d"},
+            {chapter:2,exam:"A",number:12,text:"Which of the arguments below would you use to convince your manager to organize retrospectives at the end of each release cycle?",choices:["Retrospectives are very popular these days and clients would appreciate it if we added them to our processes","Organizing retrospectives will save the organization money because without them end user representatives do not provide immediate feedback about the product","Process weaknesses identified during the retrospective can be analyzed and serve as a to do list for the organization's continuous process improvement program","Retrospectives embrace five values including courage and respect, which are crucial to maintain continuous improvement in the organization"],answer:"c"},
+            {chapter:2,exam:"A",number:13,text:"Which types of failures (1-4) fit which test levels (A-D) BEST?\n1. Failures in system behavior as it deviates from the user's business needs\n2. Failures in communication between components\n3. Failures in logic in the code\n4. Failures in not correctly implemented business rules\n\nA. Component testing\nB. Component integration testing\nC. System testing\nD. Acceptance testing",choices:["1D, 2B, 3A, 4C","1D, 2B, 3C, 4A","1B, 2A, 3D, 4C","1C, 2B, 3A, 4D"],answer:"a"},
+            {chapter:2,exam:"A",number:14,text:"You are testing a user story with three acceptance criteria: AC1, AC2 and AC3. AC1 is covered by test case TC1, AC2 by TC2, and AC3 by TC3. Tests are repeated once you are informed that all defects found in the test run are corrected and a new version of the software is available.\n\nWhich of the above tests are executed as regression tests?",choices:["Only 4, 7, 8, 9","Only 5, 7","Only 4, 6, 8, 9","Only 5, 6"],answer:"b"},
+            // Additional Questions - Exam A
+            {chapter:2,exam:"A",number:"A7",text:"You are working as a tester in the team that follows the V-model. Which of the following activities CAN be performed in the initial phases of the SDLC?",choices:["Dynamic test execution","Static testing","Test planning","Acceptance test execution","Maintenance testing"],answer:"b, c"},
+            {chapter:2,exam:"A",number:"A8",text:"Which of the following are advantages of DevOps?\ni. Faster product release and faster time to market\nii. Increases the need for repetitive manual testing\niii. Constant availability of executable software\niv. Reduction in the number of regression tests associated with code refactoring\nv. Setting up the test automation framework is inexpensive since everything is automated",choices:["i, ii, iv are advantages","iii, v are advantages","i, iii are advantages","ii, iv, v are advantages"],answer:"c"},
+            {chapter:2,exam:"A",number:"A9",text:"You work as a tester on a project on a mobile application for food ordering for one of your clients. The client sent you a list of requirements. One of them, with high priority, says 'The order must be processed in less than 10 seconds in 95% of the cases'.\n\nYou created a set of test cases in which a number of random orders were made, the processing time measured, and the test results were checked against the requirements.\n\nWhat test type did you perform?",choices:["Functional, because the test cases cover the user's business requirement for the system","Non-functional, because they measure the system's performance","Functional, because the test cases interact with the user interface","White-box, because we need to know the internal structure of the program to measure the order processing time"],answer:"b"},
+            {chapter:2,exam:"A",number:"A10",text:"Your organization's test strategy suggests that once a system is going to be retired, data migration shall be tested. As part of what test type is this testing MOST likely to be performed?",choices:["Maintenance testing","Regression testing","Reliability testing","Integration testing"],answer:"a"},
+
+            // CHAPTER 3 - STATIC TESTING
+            // Exam D
+            {chapter:3,exam:"D",number:15,text:"Which of the following CANNOT be examined by static testing?",choices:["Contract","Test plan","Encrypted code","Test charter"],answer:"c"},
+            {chapter:3,exam:"D",number:16,text:"Which of the following statements about the value of static testing is CORRECT?",choices:["The defect types found by static testing are different from the defect types that can be found by dynamic testing","Dynamic testing can detect the defect types that can be found by static testing plus some additional defect types","Dynamic testing can identify some of the defects that can be found by static testing but not all of them","Static testing can identify the defect types that can be found by dynamic testing as well as some extra defect types"],answer:"c"},
+            {chapter:3,exam:"D",number:17,text:"Given the following descriptions of review activities:\n1. Detected anomalies are deliberated upon, and determinations are reached regarding their status, ownership, and any further steps needed\n2. Defects are recorded, and any needed updates are addressed prior to the acceptance of the work product\n3. Reviewers employ techniques to come up with suggestions and questions about the work product and to spot anomalies\n4. The objective of the review and its schedule are established to ensure a focused and efficient review\n5. Participants are provided with access to the item being reviewed\n\nWhich of the following is the CORRECT sequence in the review process of the activities that correspond to the descriptions?",choices:["4 – 3 – 5 – 2 – 1","4 – 5 – 3 – 1 – 2","5 – 4 – 1 – 3 – 2","5 – 4 – 3 – 2 – 1"],answer:"b"},
+            {chapter:3,exam:"D",number:18,text:"Which participant in the review process is responsible for ensuring that the review meetings run effectively and that everyone at the meetings can voice their opinions freely?",choices:["Manager","Moderator","Chairperson","Review Leader"],answer:"b"},
+            // Exam C
+            {chapter:3,exam:"C",number:15,text:"Given the following example defects:\ni. Two different parts of the design specification disagree due to the complexity of the design\nii. A response time is too long and so makes users lose patience\niii. A path in the code cannot be reached during execution\niv. A variable is declared but never subsequently used in the program\nv. The amount of memory needed by the program to generate a report is too high\n\nWhich of the following BEST identifies example defects that could be found by static testing (rather than dynamic testing)?",choices:["ii, v","iii, v","i, ii, iv","i, iii, iv"],answer:"d"},
+            {chapter:3,exam:"C",number:16,text:"Which of the following is a benefit of early and frequent stakeholder feedback?",choices:["Changes to requirements are understood and implemented earlier","It ensures business stakeholders understand user requirements","It allows product owners to change their requirements as often as they want","End users are told which requirements will not be implemented prior to release"],answer:"a"},
+            {chapter:3,exam:"C",number:17,text:"Given the following review types:\n1. Technical review\n2. Informal review\n3. Inspection\n4. Walkthrough\n\nAnd the following descriptions:\nA. Includes objectives such as gaining consensus, generating new ideas, and motivating authors to improve\nB. Includes objectives such as educating reviewers, gaining consensus, generating new ideas and detecting potential defects\nC. The main objective is detecting potential defects and it requires metrics collection to support process improvement\nD. The main objective is detecting potential defects and it generates no formal documented output\n\nWhich of the following BEST matches the review types and the descriptions?",choices:["1A, 2B, 3C, 4D","1A, 2D, 3C, 4B","1B, 2C, 3D, 4A","1C, 2D, 3A, 4B"],answer:"b"},
+            {chapter:3,exam:"C",number:18,text:"Which of the following is a factor that contributes to a successful review?",choices:["Ensure management participate as reviewers","Split large work products into smaller parts","Set reviewer evaluation as an objective","Plan to cover one document per review"],answer:"b"},
+            // Exam B
+            {chapter:3,exam:"B",number:15,text:"Which of the following is an example of a defect that can be found by static testing but NOT by dynamic testing?",choices:["Lack of usability provided through the user interface","Code with no path that reaches it","Poor response times for most of the expected users","Required features that are not implemented in the code"],answer:"b"},
+            {chapter:3,exam:"B",number:16,text:"Which of the following is a benefit of early and frequent stakeholder feedback?",choices:["Managers are aware of which developers are less productive","It allows project managers to prioritize their stakeholder interactions","It facilitates early communication of potential quality issues","End users better understand why the delivery of the work product is delayed"],answer:"c"},
+            {chapter:3,exam:"B",number:17,text:"Given the following task descriptions:\n1. The quality characteristics to be evaluated and the exit criteria are selected\n2. Everyone has access to the work product\n3. Anomalies are identified in the work product\n4. Anomalies are discussed\n\nAnd the following review activities:\nA. Individual review\nB. Review initiation\nC. Planning\nD. Communication and analysis\n\nWhich of the following BEST matches the task descriptions and activities?",choices:["1B, 2C, 3D, 4A","1B, 2D, 3C, 4A","1C, 2A, 3B, 4D","1C, 2B, 3A, 4D"],answer:"d"},
+            {chapter:3,exam:"B",number:18,text:"Given the following roles in reviews:\n1. Scribe\n2. Review leader\n3. Facilitator\n4. Manager\n\nAnd the following responsibilities in reviews:\nA. Ensures the effective running of review meetings and the setting up a safe review environment\nB. Records review information, such as decisions and new anomalies found during the review meeting\nC. Decides what is to be reviewed and provides resources, such as staff and time for the review\nD. Takes overall responsibility for the review such as organizing when and where the review will take place\n\nWhich of the following BEST matches the roles and responsibilities?",choices:["1A, 2B, 3D, 4C","1A, 2C, 3B, 4D","1B, 2D, 3A, 4C","1B, 2D, 3C, 4A"],answer:"c"},
+            // Exam A
+            {chapter:3,exam:"A",number:15,text:"Which of the following is NOT a benefit of static testing?",choices:["Having less expensive defect management due to the ease of detecting defects later in the SDLC","Fixing defects found during static testing is generally much less expensive than fixing defects found during dynamic testing","Finding coding defects that might not have been found by only performing dynamic testing","Detecting gaps and inconsistencies in requirements"],answer:"a"},
+            {chapter:3,exam:"A",number:16,text:"Which of the following is a benefit of early and frequent feedback?",choices:["It improves the test process for future projects","It forces customers to prioritize their requirements based on agreed risks","It provides a measure for the quality of changes","It helps avoid requirements misunderstandings"],answer:"d"},
+            {chapter:3,exam:"A",number:17,text:"The reviews being used in your organization have the following attributes:\n- There is the role of a scribe\n- The main purpose is to evaluate quality\n- The meeting is led by the author of the work product\n- There is individual preparation\n- A review report is produced\n\nWhich of the following review types is MOST likely being used?",choices:["Informal review","Walkthrough","Technical review","Inspection"],answer:"b"},
+            {chapter:3,exam:"A",number:18,text:"Which of these statements is NOT a factor that contributes to successful reviews?",choices:["Participants should dedicate adequate time for the review","Splitting large work products into small parts to make the required effort less intense","Participants should avoid behaviors that might indicate boredom, exasperation, or hostility to other participants","Failures found should be acknowledged, appreciated, and handled objectively"],answer:"d"},
+            // Additional Questions - Exam A
+            {chapter:3,exam:"A",number:"A11",text:"The following is a list of the work products produced in the SDLC:\ni. Business requirements\nii. Schedule\niii. Test budget\niv. Third-party executable code\nv. User stories and their acceptance criteria\n\nWhich of them can be reviewed?",choices:["i and iv can be reviewed","i, ii, iii and iv can be reviewed","i, ii, iii, and v can be reviewed","iii, iv, v can be reviewed"],answer:"c"},
+            {chapter:3,exam:"A",number:"A12",text:"Decide which of the following statements (i-v) are true for static testing.\ni. Abnormal external behaviors are easier to identify with this testing\nii. Discrepancies from a coding standard are easier to find with this testing\niii. It identifies failures caused by defects when the software is run\niv. Its test objective is to identify defects as early as possible\nv. Missing coverage for critical security requirements is easier to find and fix",choices:["i, iv, v are true for static testing","i, iii, iv are true for static testing","ii, iii are true for static testing","ii, iv, v are true for static testing"],answer:"d"},
+            {chapter:3,exam:"A",number:"A13",text:"Which of the following statements about formal reviews is TRUE?",choices:["Some reviews do not require more than one role","The review process has several activities","Documentation to be reviewed is not distributed before the review meeting, with the exception of the work product for specific review types","Defects found during the review are not reported since they are not found by dynamic testing"],answer:"b"},
+            {chapter:3,exam:"A",number:"A14",text:"What task may management take on during a formal review?",choices:["Taking overall responsibility for the review","Deciding what is to be reviewed","Ensuring the effective running of review meetings, and moderating, if necessary","Recording review information such as review decisions"],answer:"b"},
+
+            // CHAPTER 4 - TEST ANALYSIS AND DESIGN
+            // Exam D
+            {chapter:4,exam:"D",number:19,text:"You perform system testing of an e-commerce web application and are provided with the following requirement:\n\nREQ 05-017. If the total cost of purchases exceeds $100, the customer gets a 5% discount on subsequent purchases. Otherwise, the customer does not receive a discount.\n\nWhich test techniques will be MOST helpful in designing test cases based on this requirement?",choices:["White-box test techniques","Black-box test techniques","Experience-based test techniques","Risk-based test techniques"],answer:"b"},
+            {chapter:4,exam:"D",number:20,text:"The system for selling cinema tickets calculates the discount type based on the client's birth year (BY) and on the current year (CY) as follows:\nLet D be the difference between CY and BY, that is, D = CY – BY\n\nYour test suite already contains two test cases:\nBY = 1990, CY = 2020, expected result: no discount\nBY = 2030, CY = 2029, expected result: print the error message\n\nWhich of the following test data sets should be added to achieve full valid equivalence partitioning coverage for the discount type?",choices:["BY = 2001, CY = 2065","BY = 1900, CY = 1965","BY = 1965, CY = 1900","BY = 2011, CY = 2029","BY = 2000, CY = 2000"],answer:"b, e"},
+            {chapter:4,exam:"D",number:21,text:"You are testing a temperature control system for a horticultural cold storage facility. The system receives the temperature (in full degrees Celsius) as the input. If the temperature is between 0 and 2 degrees inclusive, the system displays the message 'temperature OK'. For lower temperatures, the system displays the message 'temperature too low' and for higher temperatures it displays the message 'temperature too high'.\n\nUsing two-value boundary value analysis, which of the following sets of test inputs provides the highest level of boundary value coverage?",choices:["–1, 3","0, 2","–1, 0, 2, 3","–2, 0, 2, 4"],answer:"c"},
+            {chapter:4,exam:"D",number:22,text:"You are designing test cases based on a decision table. So far you have designed the following test cases:\n\nTC1: 19-year-old, unregistered man with no experience; expected result: category A\nTC2: 65-year-old, unregistered woman with 5 years of experience; expected result: category B\nTC3: 66-year-old, registered man with no experience; expected result: category C\nTC4: 65-year-old, registered woman with 4 years of experience; expected result: category D\n\nWhich of the following test cases, when added to the existing set of test cases, will increase the decision table coverage?",choices:["66-year-old, unregistered man with no experience; expected result: category B","55-year-old, unregistered woman with 2 years of experience; expected result: category A","19-year-old, registered woman with 5 years of experience; expected result: category D","No additional test case can increase the already achieved decision table coverage"],answer:"a"},
+            {chapter:4,exam:"D",number:23,text:"You are applying state transition testing to the hotel room reservation system. Assuming all test cases start in the 'Requesting' state, which of the following test cases, represented as sequences of events, achieves the highest valid transitions coverage?",choices:["NotAvailable, Available, ChangeRoom, NotAvailable, Cancel","Available, ChangeRoom, NotAvailable, Available, Pay","Available, ChangeRoom, Available, ChangeRoom, NotAvailable","NotAvailable, Cancel, ChangeRoom, Available, Pay"],answer:"b"},
+            {chapter:4,exam:"D",number:24,text:"Your test suite S for a program P achieves 100% statement coverage. It consists of three test cases, each of which achieves 50% statement coverage.\n\nWhich of the following statements is CORRECT?",choices:["Executing S will cause all possible failures in P","S achieves 100% branch coverage for P","Every executable statement in P containing a defect has been run at least once during the execution of S","After removing one test case from S, the remaining two test cases will still achieve 100% statement coverage"],answer:"c"},
+            {chapter:4,exam:"D",number:25,text:"Why does white-box testing facilitate defect detection even when the software specification is vague, outdated or incomplete?",choices:["Test cases are designed based on the structure of the test object rather than the specification","For each white-box test technique the coverage can be well-defined and easily measured","White-box test techniques are very well designed to detect omissions in the requirements","White-box test techniques can be used in both static testing and dynamic testing"],answer:"a"},
+            {chapter:4,exam:"D",number:26,text:"Which of the following is NOT anticipated by the tester while applying error guessing?",choices:["The developer misunderstood the formula in the user story for calculating the interest","The developer wrote 'FA = A*(1+IR^N)' instead of 'FA = A*(1+IR)^N' in the source code","The developer missed the seminar on new compound interest rate legislation","The accuracy of the interest calculated by the system is not precise enough"],answer:"c"},
+            {chapter:4,exam:"D",number:27,text:"Which of the following is true about exploratory testing?",choices:["Test cases are designed before the exploratory testing session starts","The tester can perform test execution, but cannot perform test design","Exploratory testing results are good predictors of the number of remaining defects","During exploratory testing the tester may use black-box test techniques"],answer:"d"},
+            {chapter:4,exam:"D",number:28,text:"Which collaborative user story writing practice enables the team to achieve a collective understanding of what needs to be delivered?",choices:["Planning poker, so that a team can achieve consensus on the effort needed to implement a user story","Reviews, so that a team can detect inconsistencies and contradictions in a user story","Iteration planning, so that user stories with the highest business value for a customer can be prioritized for implementation","Conversation, so that team members can understand how the software will be used"],answer:"d"},
+            {chapter:4,exam:"D",number:29,text:"You have just started designing test cases for the following user story:\nAs a customer, I want to be able to filter search results by price range, so that I can find products within my budget more easily.\n\nAcceptance criteria:\n- The filter should work for all versions of the application from version 3.0 upwards\n- The filter should allow the customer to set a price range with a minimum and a maximum price\n- The search results should update dynamically as the customer adjusts the price range filter\n\nIn all test cases the precondition is as follows: there are only two products available, products A and B. Product A costs $100 and product B costs $110.\n\nWhich of the following is the BEST example of a test case for this user story?",choices:["Enter webpage and set filter to show prices between $90 and $100. Expected result: results show product A only. Set maximum price to $110. Expected result: results now include both products A and B","Enter webpage. Expected result: the default minimum and maximum prices are $100 and $110 respectively. Add product C to stock, with price $120. Refresh the client's webpage. Expected result: the default maximum price changes to $120","Enter webpage and set filter to show prices between $90 and $115. Expected result: results show both products A and B. Change currency from USD to EUR. Expected result: the filter range changes correctly to EUR values, according to the current exchange rate","Enter webpage with three different browsers: Edge, Chrome and Opera. In each browser set filter between $90 and $110. Expected result: results include both products A and B and the results layout is the same in all three browsers"],answer:"a"},
+            // Exam C
+            {chapter:4,exam:"C",number:19,text:"What is the MAIN difference between black-box test techniques and experience-based test techniques?",choices:["The test object","The test level at which the test technique is used","The test basis","The software development lifecycle (SDLC) in which the test technique can be used"],answer:"c"},
+            {chapter:4,exam:"C",number:20,text:"You are testing a PIN validator, which accepts valid PINs and rejects invalid PINs. A PIN is a sequence of digits. A PIN is valid if it consists of four digits, which are not all the same digit. You have identified the following valid equivalence partitions:\n\nVariable: PIN code length\n- The partition 'length correct' - four-digit PINs\n- The partition 'length incorrect' - PINs with length other than 4\n\nVariable: Number of different digits\n- The partition 'number of different digits correct' - PINs with at least two different digits\n- The partition 'number of different digits incorrect' - PINs with all digits being the same\n\nWhich of the following is the BEST set of input test data to cover the identified equivalence partitions?",choices:["12, 1111, 1234, 12345","1, 123, 1111, 1234","11, 12, 1111, 12345","123, 1222, 12345"],answer:"a"},
+            {chapter:4,exam:"C",number:21,text:"A developer was asked to implement the following business rule:\nINPUT: value (integer number)\nIF (value ≤ 100 OR value ≥ 200) THEN write 'value incorrect'\nELSE write 'value OK'\n\nYou design the test cases using 2-value boundary value analysis.\n\nWhich of the following sets of test inputs achieves the greatest coverage?",choices:["100, 150, 200, 201","99, 100, 200, 201","98, 99, 100, 101","101, 150, 199, 200"],answer:"d"},
+            {chapter:4,exam:"C",number:22,text:"You are working on a project to develop a system to analyze driving test results. You have been asked to design test cases based on a decision table.\n\nWhat test data will show that there are contradictory rules in the decision table?",choices:["C1 = T, C2 = T, C3 = F","C1 = T, C2 = F, C3 = T","C1 = T, C2 = T, C3 = T and C1 = F, C2 = T, C3 = T","C1 = F, C2 = F, C3 = F"],answer:"d"},
+            {chapter:4,exam:"C",number:23,text:"You are designing test cases based on a state transition diagram.\n\nWhat is the MINIMUM number of test cases required to achieve 100% valid transitions coverage?",choices:["3","2","5","6"],answer:"a"},
+            {chapter:4,exam:"C",number:24,text:"You want to apply branch testing to the code represented by a control flow graph.\n\nHow many coverage items do you need to test?",choices:["2","4","8","7"],answer:"c"},
+            {chapter:4,exam:"C",number:25,text:"How can white-box testing be useful in support of black-box testing?",choices:["White-box coverage measures can help testers evaluate black-box tests in terms of the code coverage achieved by these black-box tests","White-box coverage analysis can help testers identify unreachable fragments of the source code","Branch testing subsumes black-box test techniques, so achieving full branch coverage guarantees achieving full coverage of any black-box technique","White-box test techniques can provide coverage items for black-box techniques"],answer:"a"},
+            {chapter:4,exam:"C",number:26,text:"Consider the following list:\n- Correct input not accepted\n- Incorrect input accepted\n- Wrong output format\n- Division by zero\n\nWhat test technique is MOST PROBABLY used by the tester who uses this list when performing testing?",choices:["Exploratory testing","Fault attack","Checklist-based testing","Boundary value analysis"],answer:"b"},
+            {chapter:4,exam:"C",number:27,text:"Which of the following BEST describes how using checklist-based testing can result in increased coverage?",choices:["Checklist items can be defined at a sufficiently low level of detail, so the tester can implement and execute detailed test cases based on these items","Checklists can be automated, so each time an automated test execution covers the checklist items, it results in additional coverage","Each checklist item should be tested separately and independently, so the elements cover different areas of the software","Two testers designing and executing tests based on the same high-level checklist items will typically perform the testing in slightly different ways"],answer:"d"},
+            {chapter:4,exam:"C",number:28,text:"Which of the following provides the BEST example of a scenario-oriented acceptance criterion?",choices:["The application must allow users to delete their account and all associated data upon request","When a customer adds an item to their cart and proceeds to checkout, they should be prompted to log in or create an account if they haven't already done so","IF (contain(product(23).Name, cart.products())) THEN return FALSE","The website must comply with the ICT Accessibility 508 Standards and ensure that all content is accessible to users with disabilities"],answer:"b"},
+            {chapter:4,exam:"C",number:29,text:"You are using acceptance test-driven development and designing test cases based on the following user story:\n\nAs a Regular or Special user, I want to be able to use my electronic floor card, to access specific floors.\n\nAcceptance Criteria:\nAC1: Regular users have access to floors 1 to 3\nAC2: Floor 4 is only accessible to Special users\nAC3: Special users have all the access rights of Regular users\n\nWhich test case is the MOST reasonable one to test AC3?",choices:["Check that a Regular user can access floors 1 and 3","Check that a Regular user cannot access floor 4","Check that a Special user can access floor 5","Check that a Special user can access floors 1, 2 and 3"],answer:"d"},
+            // Exam B
+            {chapter:4,exam:"B",number:19,text:"Which of the following statements BEST describes the difference between decision table testing and branch testing?",choices:["In decision table testing, the test cases are derived from the decision statements in the code. In branch testing, the test cases are derived from knowledge of the control flow of the test object","In decision table testing, the test cases are derived from the specification that describes the business logic. In branch testing the test cases are based on anticipation of potential defects in the source code","In decision table testing, the test cases are derived from knowledge of the control flow of the test object. In branch testing, test cases are derived from the specification that describes the business logic","In decision table testing, the test cases are independent of how the software is implemented. In branch testing, test cases can be created only after the design or implementation of the code"],answer:"d"},
+            {chapter:4,exam:"B",number:20,text:"Customers of the TestWash car wash chain have cards with a record of the number of washes they have bought so far. The initial value is 0. After entering the car wash, the system increases the number on the card by one. This value represents the number of the current wash. Based on this number the system decides what discount the customer is entitled to.\n\nFor every tenth wash the system gives a 10% discount, and for every twentieth wash, the system gives a further 40% discount (i.e., a 50% discount in total).\n\nWhich of the following sets of input data (understood as the numbers of the current wash) achieves the highest equivalence partition coverage?",choices:["19, 20, 30","11, 12, 20","1, 10, 50","10, 29, 30, 31"],answer:"a"},
+            {chapter:4,exam:"B",number:21,text:"You are testing a form that verifies the correctness of the length of the password given as input. The form accepts a password with the correct length and rejects a password that is too short or too long. The password length is correct if it has between 6 and 12 characters inclusive. Otherwise, it is considered incorrect.\n\nAt first, the form is empty (password length = 0). You apply boundary value analysis to the 'password length' variable.\n\nYour set of test cases achieves 100% 2-value boundary value coverage. The team decided that due to the high risk of this component, test cases should be added to ensure 100% 3-value boundary value coverage.\n\nWhich additional password lengths should be tested to achieve this?",choices:["4, 5, 13, 14","7, 11","1, 5, 13","1, 4, 7, 11, 14"],answer:"d"},
+            {chapter:4,exam:"B",number:22,text:"The following decision table contains the rules for determining the risk of atherosclerosis.\n\nYou designed the test cases with the following input data:\nTC1: Cholesterol = 125 mg/dl Blood pressure = 141 mm Hg\nTC2: Cholesterol = 200 mg/dl Blood pressure = 201 mm Hg\nTC3: Cholesterol = 124 mg/dl Blood pressure = 201 mm Hg\nTC4: Cholesterol = 109 mg/dl Blood pressure = 200 mm Hg\nTC5: Cholesterol = 201 mg/dl Blood pressure = 140 mm Hg\n\nWhat is the decision table coverage achieved by these test cases?",choices:["40%","60%","80%","100%"],answer:"b"},
+            {chapter:4,exam:"B",number:23,text:"A storage system can store up to three elements and is modeled by a state transition diagram. The variable N represents the number of currently stored elements.\n\nWhich of the following test cases, represented as sequences of events, achieves the highest level of valid transitions coverage?",choices:["Add, Remove, Add, Add, Add","Add, Add, Add, Add, Remove, Remove","Add, Add, Add, Remove, Remove","Add, Add, Add, Remove, Add"],answer:"c"},
+            {chapter:4,exam:"B",number:24,text:"You run two test cases, T1 and T2, on the same code. Test T1 achieved 40% statement coverage and test T2 achieved 65% statement coverage.\n\nWhich of the following sentences must be necessarily true?",choices:["The test suite composed of tests T1 and T2 achieves 105% statement coverage","There exists at least one statement that must have been executed by both T1 and T2","At least 5% of the statements in the code that was tested are non-executable","The test suite composed of tests T1 and T2 achieves full branch coverage"],answer:"b"},
+            {chapter:4,exam:"B",number:25,text:"Let the branch coverage metric be defined as BCov = (X / Y) * 100%.\n\nWhat do X and Y represent in this formula?",choices:["X = number of decision outcomes exercised by the test cases; Y = total number of decision outcomes in the code","X = number of conditional branches exercised by the test cases; Y = total number of branches in the code","X = number of branches exercised by the test cases; Y = total number of branches in the code","X = number of conditional branches exercised by the test cases; Y = total number of decision outcomes in the code"],answer:"c"},
+            {chapter:4,exam:"B",number:26,text:"Which TWO of the following statements provide the BEST rationale for using exploratory testing?",choices:["Testers have not been allocated enough time for test design and test execution","The existing test strategy requires that testers use formal, black-box test techniques","The specification is written in a formal language that can be processed by a tool","Testers are the members of an agile team and have good programming skills","Testers are experienced in the business domain and have good analytical skills"],answer:"a, e"},
+            {chapter:4,exam:"B",number:27,text:"Which of the following BEST fits as an element of the checklist used in checklist-based testing?",choices:["'The developer made an error when implementing the code'","'The achieved statement coverage exceeds 85%'","'The program works correctly regarding functional and non-functional requirements'","'The error messages are written in language that the user can understand'"],answer:"d"},
+            {chapter:4,exam:"B",number:28,text:"Consider the following acceptance criteria for a user story written from the perspective of an online store owner.\n\nGiven that the user is logged in and on the homepage,\nWhen the user clicks on the 'Add Item' button,\nThen the 'Create Item' form should appear,\nAnd the user should be able to input a name and price for the new item.\n\nIn what format is this acceptance criteria written?",choices:["Rule-oriented","Scenario-oriented","Product-oriented","Process-oriented"],answer:"b"},
+            {chapter:4,exam:"B",number:29,text:"Your team analyzes the following user story in order to define the acceptance criteria:\n\nAs a registered customer, I want to be able to view my previous orders on the company's website, so that I can keep track of my purchases.\n\nWhich of the following test cases will NOT be relevant for this user story?",choices:["Input: the customer logs into their account on the website and clicks the 'see order history' button. Expected result: the system shows a list of all the customer's previous orders, including the date, order number, and total cost","Input: the customer clicks on an order from the order list. Expected result: the system displays the individual items purchased, along with their prices and quantities","Input: the customer clicks 'Sort ascending' button on the order history screen. Expected result: the system shows the order history sorted by order number in ascending order","Input: an unregistered customer registers as a new customer with a valid e-mail address that does not already exist in the customer database. Expected result: the system accepts the registration and creates the account"],answer:"d"},
+            // Exam A
+            {chapter:4,exam:"A",number:19,text:"Which of the following is a characteristic of experience-based test techniques?",choices:["Test cases are created based on detailed design information","Items tested within the interface code section are used to measure coverage","The test techniques heavily rely on the tester's knowledge of the software and the business domain","The test cases are used to identify deviations from the requirements"],answer:"c"},
+            {chapter:4,exam:"A",number:20,text:"You are testing a simplified apartment search form which has only two search criteria:\n- floor (with three possible options: ground floor; first floor; second or higher floor)\n- garden type (with three possible options: no garden; small garden; large garden)\n\nEach of the apartment on the ground floor has a garden, apartments on higher floors don't. The form has a built-in validation mechanism that will not allow you to use the search criteria which violate this rule.\n\nEach test has two input values: floor and garden type. You want to apply equivalence partitioning (EP) to cover each floor and each garden type in your tests.\n\nWhat is the minimal number of test cases to achieve 100% EP coverage for valid partitions?",choices:["3","4","5","6"],answer:"b"},
+            {chapter:4,exam:"A",number:21,text:"You are testing a system that calculates the final course grade for a given student. The final grade is assigned based on the final result, according to the following rules:\n\n0 – 50 points: failed\n51 – 60 points: fair\n61 – 70 points: satisfactory\n71 – 80 points: good\n81 – 90 points: very good\n91 – 100 points: excellent\n\nWhat is the 2-value boundary value analysis (BVA) coverage for the final result that is achieved with the existing test cases?",choices:["50%","60%","33.3%","100%"],answer:"a"},
+            {chapter:4,exam:"A",number:22,text:"Your favorite bicycle daily rental store has just introduced a new Customer Relationship Management system and asked you, one of their most loyal members, to test it.\n\nThe implemented features are as follows:\n- Anyone can rent a bicycle, but members receive a 20% discount\n- However, if the return deadline is missed, the discount is no longer available\n- After 15 rentals, members get a gift: a T-Shirt\n\nBased ONLY on the feature description of the Customer Relationship Management system, which of the above rules describes an impossible situation?",choices:["R4","R2","R6","R8"],answer:"d"},
+            {chapter:4,exam:"A",number:23,text:"You test a system whose lifecycle is modeled by a state transition diagram. The system starts in the INIT state and ends its operation in the OFF state.\n\nWhat is the MINIMAL number of test cases to achieve valid transitions coverage?",choices:["4","2","7","3"],answer:"d"},
+            {chapter:4,exam:"A",number:24,text:"Your test suite achieved 100% statement coverage. What is the consequence of this fact?",choices:["Each instruction in the code that contains a defect has been executed at least once","Any test suite containing more test cases than your test suite will also achieve 100% statement coverage","Each path in the code has been executed at least once","Every combination of input values has been tested at least once"],answer:"a"},
+            {chapter:4,exam:"A",number:25,text:"Which of the following is NOT true for white-box testing?",choices:["During white-box testing the entire software implementation is considered","White-box coverage metrics can help identify additional tests to increase code coverage","White-box test techniques can be used in static testing","White-box testing can help identify gaps in requirements implementation"],answer:"d"},
+            {chapter:4,exam:"A",number:26,text:"Which of the following BEST describes the concept behind error guessing?",choices:["Error guessing involves using your knowledge and experience of defects found in the past and typical errors made by developers","Error guessing involves using your personal experience of development and the errors you made as a developer","Error guessing requires you to imagine that you are the user of the test object and to guess errors the user could make interacting with it","Error guessing requires you to rapidly duplicate the development task to identify the sort of errors a developer might make"],answer:"a"},
+            {chapter:4,exam:"A",number:27,text:"In your project there has been a delay in the release of a brand-new application and test execution started late, but you have very detailed domain knowledge and good analytical skills. The full list of requirements has not yet been shared with the team, but management is asking for some test results to be presented.\n\nWhich test technique fits BEST in this situation?",choices:["Checklist-based testing","Error guessing","Exploratory testing","Branch testing"],answer:"c"},
+            {chapter:4,exam:"A",number:28,text:"Which of the following BEST describes the way acceptance criteria can be documented?",choices:["Performing retrospectives to determine the actual needs of the stakeholders regarding a given user story","Using the given/when/then format to describe an example test condition related to a given user story","Using verbal communication to reduce the risk of misunderstanding the acceptance criteria by others","Documenting risks related to a given user story in a test plan to facilitate the risk-based testing of a given user story"],answer:"b"},
+            {chapter:4,exam:"A",number:29,text:"Consider the following user story:\n\nAs an Editor\nI want to review content before it is published\nso that I can ensure the grammar is correct\n\nand its acceptance criteria:\n- The user can log in to the content management system with 'Editor' role\n- The editor can view existing content pages\n- The editor can edit the page content\n- The editor can add markup comments\n- The editor can save changes\n- The editor can reassign to the 'content owner' role to make updates\n\nWhich of the following is the BEST example of an ATDD test for this user story?",choices:["Test if the editor can save the document after edit the page content","Test if the content owner can log in and make updates to the content","Test if the editor can schedule the edited content for publication","Test if the editor can reassign to another editor to make updates"],answer:"a"},
+            // Additional Questions - Exam A
+            {chapter:4,exam:"A",number:"A15",text:"A wine storage system uses a control device that measures the wine cell temperature T (measured in °C, rounded to the nearest degree) and alarms the user if it deviates from the optimal value of 12, according to the following rules:\n\nif T = 12, the system says, 'optimal temperature'\nif T < 12, the system says, 'temperature is too low!'\nif T > 12, the system says, 'temperature is too high!'\n\nYou want to use the 3-point boundary value analysis (BVA) to verify the behavior of the control device. A test input is a temperature in °C provided by the device.\n\nWhat is the MINIMAL set of test inputs that achieves 100% of the desired coverage?",choices:["11, 12, 13","10, 12, 14","10, 11, 12, 13, 14","10, 11, 13, 14"],answer:"c"},
+            {chapter:4,exam:"A",number:"A16",text:"Which of the following statements about branch testing is CORRECT?",choices:["If a program includes only unconditional branches, then 100% branch coverage can be achieved without executing any test cases","If the test cases exercise all unconditional branches in the code, then 100% branch coverage is achieved","If 100% statement coverage is achieved, then 100% branch coverage is also achieved","If 100% branch coverage is achieved, then all decision outcomes in each decision statement in the code are exercised"],answer:"d"},
+            {chapter:4,exam:"A",number:"A17",text:"You are testing a mobile application that allows customers to access and manage their bank accounts. You are running a test suite that involves evaluating each screen, and each field on each screen, against a general list of user interface best practices derived from a popular book on the topic that maximizes usability for such applications. Which of the following options BEST categorizes the test technique you are using?",choices:["Black-box","Exploratory","Checklist-based","Error guessing"],answer:"c"},
+            {chapter:4,exam:"A",number:"A18",text:"Which of the following BEST describe the collaborative approach to user story writing?",choices:["User stories are created by testers and developers and then accepted by business representatives","User stories are created by business representatives, developers, and testers together","User stories are created by business representatives and verified by developers and testers","User stories are created in a way that they are independent, negotiable, valuable, estimable, small, and testable"],answer:"b"},
+
+            // CHAPTER 5 - MANAGING THE TEST ACTIVITIES  
+            // Exam D
+            {chapter:5,exam:"D",number:30,text:"Which of the following BEST define EXIT criteria in a testing project?",choices:["Budget is approved","Budget runs out","Test basis is available","Test cases achieved at least 80% statement coverage","All test analysts are ISTQB certified at the Foundation Level"],answer:"b, d"},
+            {chapter:5,exam:"D",number:31,text:"The team wants to estimate the time needed for one tester to execute four test cases for a software component. The team has gathered the following measures of the effort used to execute a single test case:\n\nBest-case scenario: 1 hour\nWorst-case scenario: 8 hours\nMost likely scenario: 3 hours\n\nGiven that the three-point estimation technique is being used, what is the final estimate of the time needed to execute all four test cases?",choices:["14 hours","3.5 hours","16 hours","12 hours"],answer:"a"},
+            {chapter:5,exam:"D",number:32,text:"The table shows the traceability matrix from test cases to requirements. 'X' means that a given test case covers the corresponding requirement.\n\nYou want to prioritize the test cases following the additional coverage prioritization technique. You execute all four test cases.\n\nWhich test case should be executed as the LAST one?",choices:["TC1","TC2","TC3","TC4"],answer:"b"},
+            {chapter:5,exam:"D",number:33,text:"How can the testing quadrants be beneficial for testing?",choices:["They help in test planning by dividing the test process into four phases, corresponding to the four basic test levels: component, integration, system, and acceptance testing","They help in assessing the high-level coverage (e.g., requirements coverage) based on low-level coverage (e.g., code coverage)","They help non-technical stakeholders to understand the different test types and that some test types are more relevant to certain test levels than others","They help agile teams to develop a communication strategy based on classifying people according to four basic psychological types, and on modelling the relations between them"],answer:"c"},
+            {chapter:5,exam:"D",number:34,text:"For a given risk, its risk level is $1,000 and its risk likelihood is estimated as 50%.\n\nWhat is the risk impact?",choices:["$500","$2,000","$50,000","$200"],answer:"b"},
+            {chapter:5,exam:"D",number:35,text:"Which of the following are product risks?",choices:["Scope creep","Poor architecture","Cost-cutting","Poor tool support","Too long response time"],answer:"b, e"},
+            {chapter:5,exam:"D",number:36,text:"Which of the following is NOT a valid purpose for a test report?",choices:["Tracking test progress and identifying areas that require further attention","Providing information on the tests executed, their results, and defects found","Providing information about each defect, such as the steps to reproduce it","Providing information on testing planned for the next period"],answer:"c"},
+            {chapter:5,exam:"D",number:37,text:"The user reported a software failure. An engineer from the support team asked the user for the software version number where the failure was observed. Based on the version number, the team reassembled all the files that made up the release. This later allowed a developer to perform analysis, find the defect, and fix it.\n\nWhich of the following enabled the above activity to be performed by the team?",choices:["Risk management","Test monitoring and control","Whole team approach","Configuration management"],answer:"d"},
+            {chapter:5,exam:"D",number:38,text:"Consider the following defect report for a Book Lending System.\n\nDefect ID: 001 | Title: Unable to Return a Book | Severity: High | Priority: [blank]\nEnvironment: Windows 10, Google Chrome\n\nDescription: When attempting to return a book using the Book Return feature, the system does not register the return and the book remains checked out to the user.\n\nSteps to Reproduce:\n1. Login to the Book Lending System as a user who has checked out a book.\n2. Click on the 'Book Return' button for the book that has been checked out.\n3. System does not register the return and the book remains checked out.\n\nExpected Result: The book should be returned and no longer appear as checked out to the user.\nActual Result: The book remains checked out to the user and is not registered as returned in the system.\nAttachments: [empty list]\n\nWhich of the following is MOST likely to help the developer reproduce the failure quickly?",choices:["Adding information about which users and which books the failure affects to the 'Description' section","Filling in the missing value for the 'Priority' field","Adding memory dumps and database snapshots taken after each step described in the 'Steps to Reproduce' section to the 'Attachments' section","Repeating the same test case for different environments and writing defect reports for each of them separately"],answer:"a"},
+            // Exam C
+            {chapter:5,exam:"C",number:30,text:"Which of the following is NOT a purpose of a test plan?",choices:["To define test data and expected results for component tests and component integration tests","To define as exit criteria from the component test level that '100% statement coverage and 100% branch coverage must be achieved'","To describe what fields the test progress report shall contain and what should be the form of this report","To explain why system integration testing will be excluded from testing, although the test strategy requires this test level"],answer:"a"},
+            {chapter:5,exam:"C",number:31,text:"At the beginning of each iteration, the team estimates the amount of work (in person-days) they will need to complete during the iteration. Let E(n) be the estimated amount of work for iteration n, and let A(n) be the actual amount of work done in iteration n. From the third iteration, the team uses the following estimation model based on extrapolation:\n\nE(n) = (3 * A(n-1) + A(n-2)) / 4\n\nWhat is the estimated amount of work for iteration #5?",choices:["10.5 person-days","8.25 person-days","6.5 person-days","9.4 person-days"],answer:"c"},
+            {chapter:5,exam:"C",number:32,text:"You are preparing a test execution schedule for executing seven test cases TC 1 to TC 7.\n\nThe figure includes the priorities of these test cases (1=highest priority, 3 = lowest priority). The figure also shows the dependencies between test cases using arrows. For instance, the arrow from TC 4 to TC 5 means that TC 5 can only be executed if TC 4 was previously executed.\n\nWhich test case should be executed sixth?",choices:["TC 3","TC 5","TC 6","TC 2"],answer:"a"},
+            {chapter:5,exam:"C",number:33,text:"What does the test pyramid model show?",choices:["That tests may have different priorities","That tests may have different granularity","That tests may require different coverage criteria","That tests may depend on other tests"],answer:"b"},
+            {chapter:5,exam:"C",number:34,text:"What is the relationship between the testing quadrants, test levels and test types?",choices:["Testing quadrants represent particular combinations of test levels and test types, defining their location in the software development lifecycle","Testing quadrants describe the degree of granularity of individual test types performed at each test level","Testing quadrants assign the test types that can be performed to the test levels","Testing quadrants group test levels and test types by several criteria such as targeting specific stakeholders"],answer:"d"},
+            {chapter:5,exam:"C",number:35,text:"Which of the following is an example of how product risk analysis may influence the thoroughness and scope of testing?",choices:["Continuous risk monitoring allows us to identify an emerging risk as soon as possible","Risk identification allows us to implement risk mitigation activities and reduce the risk level","The assessed risk level helps us to select the rigor of testing","Risk analysis allows us to derive coverage items"],answer:"c"},
+            {chapter:5,exam:"C",number:36,text:"Which of the following activities in the test process makes the MOST use of test progress reports?",choices:["Test design","Test completion","Test analysis","Test planning"],answer:"b"},
+            {chapter:5,exam:"C",number:37,text:"Which of the following is NOT an example of how configuration management supports testing?",choices:["All commits to the repository are uniquely identified and version controlled","All changes in the test environment elements are tracked","All requirement specifications are referenced unambiguously in test plans","All identified defects have an assigned status"],answer:"d"},
+            {chapter:5,exam:"C",number:38,text:"Consider the following defect report for a web-based shopping application:\n\nApplication: WebShop v0.99\nDefect: Login button not working\n\nSteps to Reproduce:\n1. Launch the website\n2. Click on the login button\n\nExpected result: The user should be redirected to the login page.\nActual result: The login button does not respond when clicked.\n\nSeverity: High\nPriority: Urgent\n\nWhat is the MOST important information that is missing from this defect report?",choices:["Name of the tester and date","Test environment elements and their version numbers","Identification of the test object","Impact on the interests of stakeholders"],answer:"b"},
+            // Exam B
+            {chapter:5,exam:"B",number:30,text:"Your team follows the process that uses the DevOps delivery pipeline. The first three steps of this process are:\n(1) Code development\n(2) Submit code into a version control system and merge it into the 'test' branch\n(3) Perform component testing for the submitted code\n\nWhich of the following is BEST suited to be the entry criterion for step (2) of this pipeline?",choices:["Static analysis returns no high severity warnings for the submitted code","System version control reports no conflicts when merging code into the 'test' branch","Component tests are compiled and ready to be executed","Statement coverage is at least 80%"],answer:"a"},
+            {chapter:5,exam:"B",number:31,text:"You want to estimate the test effort for the new project using estimation based on ratios. You calculate the test-to-development effort ratio using averaged data for both development effort and test effort from four historical projects similar to the new one.\n\nThe estimated development effort for the new project is $800,000. What is your estimate of the test effort in this project?",choices:["$40,000","$80,000","$81,250","$82,500"],answer:"b"},
+            {chapter:5,exam:"B",number:32,text:"You are testing a web application that allows users to SEARCH for products, VIEW product details, ADD products to a shopping cart, and place an ORDER.\n\nYou have prepared seven test cases, all of which you want to execute. The tests should be executed in the best order, based on test priority.\n\nWhich test case should be executed as the fourth one?",choices:["TC3","TC1","TC7","TC2"],answer:"b"},
+            {chapter:5,exam:"B",number:33,text:"According to the testing quadrants model, which of the following falls into quadrant Q1 ('technology facing' and 'support the team')?",choices:["Usability testing","Functional testing","User acceptance testing","Component integration testing"],answer:"d"},
+            {chapter:5,exam:"B",number:34,text:"Given the following risks:\n1. Ineffective loop implementation causes long system responses\n2. Consumers change their preferences\n3. Flooding of the server room\n4. Patients above a certain age receive inaccurate reports\n\nAnd the following mitigation activities:\nA. Risk acceptance\nB. Testing for performance efficiency\nC. Using boundary value analysis as the test technique\nD. Risk transfer\n\nWhich of the following BEST matches the risks with the mitigation activities?",choices:["1C, 2D, 3A, 4B","1B, 2D, 3A, 4C","1B, 2A, 3D, 4C","1C, 2A, 3D, 4B"],answer:"c"},
+            {chapter:5,exam:"B",number:35,text:"Which of the following is a product quality metric?",choices:["Mean time to failure","Number of defects found","Requirements coverage","Defect detection percentage"],answer:"a"},
+            {chapter:5,exam:"B",number:36,text:"You are a member of a test team located in North America, developing a product for a client located in Europe. The team is agile and follows the DevOps approach and uses a continuous integration/continuous delivery pipeline.\n\nWhich of the following is the LEAST effective way to communicate test progress to the customer?",choices:["Face-to-face","Dashboards","Email","Video conferencing"],answer:"a"},
+            {chapter:5,exam:"B",number:37,text:"Which of the following BEST describes an example of how configuration management (CM) supports testing?",choices:["Having the version number of the environment, the CM tool can retrieve the version numbers of libraries, stubs and drivers used in that environment","Having a record of the values of the inputs, the CM tool can execute the test cases for these configurations and calculate the coverage","Having data about the date of purchase of a software license, the CM tool automatically generates information about the fact that the product license is coming to an end","Having the version number of the test case, the CM tool can automatically generate test data for this test case"],answer:"a"},
+            {chapter:5,exam:"B",number:38,text:"You are testing a sort function that gets a set of numbers as input and returns the same set of numbers sorted in ascending order. The log from the test execution looks as follows.\n\nEnvironment configuration: sort function build 2.002.2182, test case set: TCS-3, # of TCs: 5\nTest run ID: 736\nStart 12:43:21.003\n\n12:43:21.003 Execution of TC1. Input: 3. Output: 3. Result: passed\n12:43:21.003 Execution of TC2. Input: 3 11 6 5. Output: 3 5 6 11. Result: passed\n12:43:21.004 Execution of TC3. Input: 8 7 3 7 1. Output: 1 3 7 8. Result: failed\n12:43:21.005 Execution of TC4. Input: -2 -2 -2 -3 -3. Output: -3 -2. Result: failed\n12:43:21.005 Execution of TC5. Input: 0 -2 0 3 4 4. Output: -2 0 3 4. Result: failed\n\nEnd 12:43:21.005\nTotal time of test cycle: 0:00:00.002\n\nWhich of the following provides the BEST description of the failure that can be used in a defect report?",choices:["The system fails to sort several sets of numbers. Reference: TC3, TC4, TC5","The system seems to disregard duplicates while sorting. Reference: TC3, TC4, TC5","The system fails to sort negative numbers. Reference: TC4, TC5","TC3, TC4 and TC5 have defects (duplicate input data) and should be corrected"],answer:"b"},
+            // Exam A
+            {chapter:5,exam:"A",number:30,text:"How do testers add value to iteration and release planning?",choices:["Testers determine the priority of the user stories to be developed","Testers focus only on the functional aspects of the system to be tested","Testers participate in the detailed risk identification and risk assessment of user stories","Testers guarantee the release of high-quality software through early test design during the release planning"],answer:"c"},
+            {chapter:5,exam:"A",number:31,text:"Which TWO of the following options are the exit criteria for testing a system?",choices:["Test environment readiness","The ability to log in to the test object by the tester","Estimated defect density is reached","Requirements are translated into given/when/then format","Regression tests are automated"],answer:"c, e"},
+            {chapter:5,exam:"A",number:32,text:"Your team uses the three-point estimation technique to estimate the test effort for a new high-risk feature. The following estimates were made:\n\nMost optimistic estimation: 2 person-hours\nMost likely estimation: 11 person-hours\nMost pessimistic estimation: 14 person-hours\n\nWhat is the final estimate?",choices:["9 person-hours","14 person-hours","11 person-hours","10 person-hours"],answer:"d"},
+            {chapter:5,exam:"A",number:33,text:"You are testing a mobile application that allows users to find a nearby restaurant based on the type of food they want to eat. Consider the following list of test cases, priorities (i.e., a smaller number means a higher priority), and dependencies.\n\nWhich of the following test cases should be executed as the third one?",choices:["TC 003","TC 005","TC 002","TC 001"],answer:"a"},
+            {chapter:5,exam:"A",number:34,text:"Consider the following test categories (1-4) and agile testing quadrants (A-D):\n1. Usability testing\n2. Component testing\n3. Functional testing\n4. Reliability testing\n\nA. Agile testing quadrant Q1: technology facing, supporting the development team\nB. Agile testing quadrant Q2: business facing, supporting the development team\nC. Agile testing quadrant Q3: business facing, critique the product\nD. Agile testing quadrant Q4: technology facing, critique the product\n\nHow do the following test categories map onto the agile testing quadrants?",choices:["1C, 2A, 3B, 4D","1D, 2A, 3C, 4B","1C, 2B, 3D, 4A","1D, 2B, 3C, 4A"],answer:"a"},
+            {chapter:5,exam:"A",number:35,text:"During a risk analysis the following risk was identified and assessed:\n\nRisk: Response time is too long to generate a report\nRisk likelihood: medium; risk impact: high\n\nResponse to risk:\n- An independent test team performs performance efficiency testing during system testing\n- A selected sample of end users performs alpha testing and beta testing before the release\n\nWhat measure is proposed to be taken in response to this analyzed risk?",choices:["Risk acceptance","Contingency plan","Risk mitigation","Risk transfer"],answer:"c"},
+            {chapter:5,exam:"A",number:36,text:"Which work product can be used by an agile team to show the amount of work that has been completed and the amount of total work remaining for a given iteration?",choices:["Acceptance criteria","Defect report","Test completion report","Burndown chart"],answer:"d"},
+            {chapter:5,exam:"A",number:37,text:"You need to update one of the automated test scripts to be in line with a new requirement. Which process indicates that you create a new version of the test script in the test repository?",choices:["Traceability management","Maintenance testing","Configuration management","Requirements engineering"],answer:"c"},
+            {chapter:5,exam:"A",number:38,text:"You received the following defect report from the developers stating that the anomaly described in this test report is not reproducible.\n\nApplication hangs up\n2022-May-03 – John Doe – Rejected\n\nThe application hangs up after entering 'Test input: $ä' in the Name field on the new user creation screen. Tried to log off, log in with test_admin01 account, same issue. Tried with other test admin accounts, same issue. No error message received; log (see attached) contains fatal error notification. Based on the test case TC-1305, the application should accept the provided input and create the user. Please fix with high priority, this feature is related to REQ-0012, which is a critical new business requirement.\n\nWhat critical information is MISSING from this test report that would have been useful for the developers?",choices:["Expected result and actual result","References and defect status","Test environment and test item","Priority and severity"],answer:"c"},
+            // Additional Questions - Exam A
+            {chapter:5,exam:"A",number:"A19",text:"Consider the following part of a test plan:\n\nTesting will be performed using component testing and component integration testing. The regulations require to demonstrate that 100% branch coverage is achieved for each component classified as critical.\n\nWhich part of the test plan does this part belong to?",choices:["Communication","Risk register","Context of testing","Test approach"],answer:"d"},
+            {chapter:5,exam:"A",number:"A20",text:"Your team uses planning poker to estimate the test effort for a newly required feature. There is a rule in your team that if there is no time to reach full agreement and the variation in the results is small, rules like 'accept the number with the most votes' can be applied.\n\nAfter two rounds, the consensus was not reached, so the third round was initiated.\n\nWhich of the following is the BEST example of the next step?",choices:["The product owner has to step in and make a final decision","Accept 13 as the final test estimate as this has most of the votes","No further action is needed. Consensus has been reached","Remove the new feature from the current release because consensus has not been reached"],answer:"b"},
+            {chapter:5,exam:"A",number:"A21",text:"Which of the following is TRUE regarding the test pyramid?",choices:["It emphasizes having far more tests at the lower test levels","It suggests that each low-level test checks a large part of the functionality","It describes distribution of test types across the SDLC","It has no impact on the construction of automated tests"],answer:"a"},
+            {chapter:5,exam:"A",number:"A22",text:"During risk analysis the team considered the following risk: 'The system allows too high a discount for a customer'. The team estimated the risk impact to be very high.\n\nWhat can one say about the risk likelihood?",choices:["It is also very high. High risk impact always implies high risk likelihood","It is very low. High risk impact always implies low risk likelihood","One cannot say anything about risk likelihood. Risk impact and risk likelihood are independent","Risk likelihood is not important with such a high-risk impact. One does not need to define it"],answer:"c"},
+            {chapter:5,exam:"A",number:"A23",text:"The following list contains risks that have been identified for a new software product to be developed:\ni. Management moves two experienced testers to another project\nii. The system does not comply with security standards\niii. System response time exceeds user requirements\niv. Stakeholders have inaccurate expectations\nv. Disabled people have problems when using the system\n\nWhich of them are project risks?",choices:["i, iv are project risks","iv, v are project risks","i, iii are project risks","ii, v are project risks"],answer:"a"},
+            {chapter:5,exam:"A",number:"A24",text:"Which of the following is an example of how product risk analysis influences thoroughness and scope of testing?",choices:["The test manager monitors and reports the level of all known risks on a daily basis so the stakeholders can make an informed decision on the release date","One of the identified risks was 'Lack of support of open-source databases', so the team decided to integrate the system with an open-source database","During the quantitative risk analysis, the team estimated the total level of all identified risks and reported it as the total residual risk before testing","Risk assessment revealed a very high level of performance risks, so it was decided to perform detailed performance efficiency testing early in the SDLC"],answer:"d"},
+            {chapter:5,exam:"A",number:"A25",text:"Which TWO of the following options are common metrics used for reporting on the quality level of the test object?",choices:["Number of defects found during system testing","Total effort on test design divided by the number of designed test cases","Number of executed test procedures","Number of defects found divided by the size of a work product","Time needed to repair a defect"],answer:"a, d"},
+            {chapter:5,exam:"A",number:"A26",text:"Which of the following pieces of information contained in a test progress report is the LEAST useful for business representatives?",choices:["Impediments to testing","Branch coverage achieved","Test progress","New risks within the test cycle"],answer:"b"},
+
+            // CHAPTER 6 - TEST TOOLS
+            // Exam D
+            {chapter:6,exam:"D",number:39,text:"Given the following test tool categories:\ni. Collaboration tools\nii. DevOps tools\niii. Management tools\niv. Non-functional testing tools\nv. Test design and implementation tools\n\nTools from which of the categories are MOST likely to facilitate test execution?",choices:["i, v","ii, iv","i, iii, v","ii, iii, iv"],answer:"b"},
+            {chapter:6,exam:"D",number:40,text:"Which of the following is MOST likely to be a risk of test automation?",choices:["The detection of additional high-severity defects","Providing measures that are too complicated for humans to derive","Incompatibility with the development platform","Substantially reduced test execution times"],answer:"c"},
+            // Exam C
+            {chapter:6,exam:"C",number:39,text:"Tools from which of the following categories help with the organization of test cases, detected defects and configuration management?",choices:["Test execution and coverage tools","Test design and implementation tools","Defect management tools","Test management tools"],answer:"d"},
+            {chapter:6,exam:"C",number:40,text:"Which of the following is MOST likely to be a benefit of test automation?",choices:["The capability of generating test cases without access to the test basis","The achievement of increased coverage through more objective assessment","The increase in test execution times available with higher processing power","The prevention of human errors through greater consistency and repeatability"],answer:"d"},
+            // Exam B
+            {chapter:6,exam:"B",number:39,text:"Given the following descriptions:\n1. Support workflow tracking\n2. Facilitate communication\n3. Virtual machines\n4. Support reviews\n\nAnd the following test tool categories:\nA. Static testing tools\nB. Tools supporting scalability and deployment standardization\nC. DevOps tools\nD. Collaboration tools\n\nWhich of the following BEST matches the descriptions and categories?",choices:["1A, 2B, 3C, 4D","1B, 2D, 3C, 4A","1C, 2D, 3B, 4A","1D, 2C, 3A, 4B"],answer:"c"},
+            {chapter:6,exam:"B",number:40,text:"Which of the following is MOST likely to be a benefit of test automation?",choices:["It provides coverage measures that are too complicated for humans to derive","It shares responsibility for the testing with the tool vendor","It removes the need for critical thinking when analyzing test results","It generates test cases from an analysis of the program code"],answer:"a"},
+            // Exam A
+            {chapter:6,exam:"A",number:39,text:"Which test activity does a data preparation tool support?",choices:["Test monitoring and test control","Test analysis","Test design and test implementation","Test completion"],answer:"c"},
+            {chapter:6,exam:"A",number:40,text:"Which item correctly identifies a potential risk of performing test automation?",choices:["It may introduce unknown regressions in production","Sufficient efforts to maintain testware may not be properly allocated","Testing tools and associated testware may not be sufficiently relied upon","It may reduce the time allocated for manual testing"],answer:"b"}
+        ];
+
+        function renderQuestions() {
+            const selectedChapter = document.getElementById('chapterSelect').value;
+            const selectedExam = document.getElementById('examSelect').value;
+            const container = document.getElementById('questionsContainer');
+            
+            let filteredQuestions = questions.filter(q => {
+                const chapterMatch = selectedChapter === 'all' || q.chapter == selectedChapter;
+                const examMatch = selectedExam === 'all' || q.exam === selectedExam;
+                return chapterMatch && examMatch;
+            });
+
+            if (filteredQuestions.length === 0) {
+                container.innerHTML = '<div class="no-questions">No questions match your selection.</div>';
+                document.getElementById('displayedQuestions').textContent = '0';
+                return;
+            }
+
+            // Group by chapter
+            const grouped = {};
+            filteredQuestions.forEach(q => {
+                if (!grouped[q.chapter]) {
+                    grouped[q.chapter] = [];
+                }
+                grouped[q.chapter].push(q);
+            });
+
+            let html = '';
+            const chapterNames = {
+                1: 'Fundamentals of Testing',
+                2: 'Testing Throughout the Software Development Lifecycle',
+                3: 'Static Testing',
+                4: 'Test Analysis and Design',
+                5: 'Managing the Test Activities',
+                6: 'Test Tools'
+            };
+
+            Object.keys(grouped).sort((a, b) => a - b).forEach(chapter => {
+                html += `<h2 class="chapter-title">Chapter ${chapter}: ${chapterNames[chapter]}</h2>`;
+                
+                grouped[chapter].forEach((q, idx) => {
+                    const questionId = `q-${q.exam}-${q.chapter}-${q.number}`;
+                    html += `
+                        <div class="question-card">
+                            <div class="question-header">
+                                <span class="question-number">Question ${q.number} (Exam ${q.exam})</span>
+                                <span class="exam-badge">Sample Exam ${q.exam}</span>
+                            </div>
+                            <div class="question-text">${q.text}</div>
+                            <div class="choices">
+                                ${q.choices.map((choice, i) => `
+                                    <div class="choice">
+                                        <span class="choice-label">${String.fromCharCode(97 + i)}).</span>
+                                        ${choice}
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <button class="show-answer-btn" onclick="toggleAnswer('${questionId}')">
+                                Show Answer
+                            </button>
+                            <div id="${questionId}" class="answer-section">
+                                <div class="correct-answer">
+                                    ✓ Correct Answer: ${q.answer.toUpperCase()}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            });
+
+            container.innerHTML = html;
+            document.getElementById('displayedQuestions').textContent = filteredQuestions.length;
+        }
+
+        function toggleAnswer(id) {
+            const answerSection = document.getElementById(id);
+            const btn = answerSection.previousElementSibling;
+            
+            if (answerSection.classList.contains('show')) {
+                answerSection.classList.remove('show');
+                btn.textContent = 'Show Answer';
+            } else {
+                answerSection.classList.add('show');
+                btn.textContent = 'Hide Answer';
+            }
+        }
+
+        // Event listeners
+        document.getElementById('chapterSelect').addEventListener('change', renderQuestions);
+        document.getElementById('examSelect').addEventListener('change', renderQuestions);
+
+        // Initialize
+        document.getElementById('totalQuestions').textContent = questions.length;
+        renderQuestions();
+    </script>
+</body>
+</html>
